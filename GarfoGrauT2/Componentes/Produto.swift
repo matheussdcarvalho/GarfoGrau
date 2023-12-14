@@ -30,12 +30,14 @@ struct Produto: View {
             
             VStack(alignment: .leading){
                     Text(nome)
-                        .font(.system(size: 20))
+                        .font(.title3)
                         .bold()
                     Text(descricao)
+                    .font(.body)
                     .frame(width: 150)
             }
             Text("R$" + preco)
+                .font(.body)
                 .offset(y: -20)
         }
     }

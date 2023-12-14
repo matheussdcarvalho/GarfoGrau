@@ -6,12 +6,22 @@ struct AvaliaView: View {
     @State private var reviews: [Review] = []
     
     var body: some View {
-        
-        NavigationView {
-            
+        ZStack{
+            Image("YVector")
+                .ignoresSafeArea()
+                .frame(height: 100)
+                .overlay {
+                    Text("DÊ SUA OPINIÃO")
+                        .font(.system(size: 30))
+                        .offset(y: -80)
+                        .bold()
+                }
+                .offset(y: -294)
             VStack {
                 Text("O que você achou da comida?")
-                    .font(.headline)
+                    .font(.title2)
+                
+                //Estrelinhas
                 HStack {
                     ForEach(1..<6) { number in
                         Button(action: {
@@ -23,30 +33,62 @@ struct AvaliaView: View {
                         }
                     }
                 }
+                //Adiciona Comentário
                 .padding()
-                
-                Text("Adicionar Comentário:")
-                    .font(.headline)
+                Text("Faça um breve comentário, se desejar:")
+                    .font(.title2)
                     .padding()
                 
-                TextEditor(text: $comment)
+                TextField("", text: $comment)
+                    .frame(width: 300, height: 60)
                     .padding()
-                    .frame(height: 100)
-                    .border(Color.gray, width: 1)
+                    .background(Color.black.opacity(0.05))
+                    .cornerRadius(10)
                     .padding()
                 
-            Label:do {
-                Button("ENVIAR AVALIAÇÃO"){
+                //Botão enviar avaliação
+                Button(action: {
                     saveReview()
+                }){
+                Label: do{
+                    Text("AVALIAR")
+                        .font(.headline)
+                        .frame(width: 100,height: 18)
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.orangeButton)
+                        .cornerRadius(10)
+                        .offset(y: 10)
+                    //                        .overlay(
+                    //                            RoundedRectangle(cornerRadius: 10)
+                    //                                .stroke(Color.white, lineWidth: 1)
+                    //                        )
+                        .shadow(color: .gray, radius: 4, x: 0, y: 4)
+                    }
                 }
-            }
                 
+                
+                Button(action: {
+                    removeReview(reviewID: UUID())
+                }){
+                Label: do{
+                    Text("REMOVER")
+                        .font(.headline)
+                        .frame(width: 100,height: 18)
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.orangeButton)
+                        .cornerRadius(10)
+                        .shadow(color: .gray, radius: 4, x: 0, y: 4)
+                    }
+                }
+                
+                //Avaliações anteriores
                 NavigationLink(destination: PreviousReviewsView(reviews: reviews)) {
                 Label: do{
-                    Text("Avaliações Anteriores")
+                    Text("AVALIAÇÕES ANTERIORES")
                         .font(.headline)
-                        .font(.headline)
-                        .frame(width: 180)
+                        .frame(width: 213)
                         .foregroundColor(.black)
                         .padding()
                         .background(Color.white)
@@ -55,12 +97,9 @@ struct AvaliaView: View {
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(Color.black, lineWidth: 1)
                         )
-                }
+                    }
                 }
             }
-            
-            
-            
         }
         .onAppear {
             loadReviews()
@@ -92,14 +131,16 @@ struct AvaliaView: View {
         }
     }
     
-    func removeAva(){
-        
+    func removeReview(reviewID: UUID) {
+        // Filtra a lista de avaliações, mantendo apenas aquelas cujo id não corresponde ao id fornecido
+        reviews = reviews.filter { $0.id != reviewID }
+        // Chama a função saveReviews() para salvar a lista atualizada (se necessário)
+        saveReviews()
     }
 }
 
 struct PreviousReviewsView: View {
     var reviews: [Review]
-    
     var body: some View {
         VStack {
             Text("Avaliações Anteriores:")
@@ -121,7 +162,6 @@ struct PreviousReviewsView: View {
             }
             .listStyle(PlainListStyle())
         }
-        .navigationBarTitle("Avaliações Anteriores")
     }
 }
 
@@ -131,8 +171,3 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-struct Review: Identifiable, Codable {
-    var id = UUID()
-    var rating: Int
-    var comment: String
-}

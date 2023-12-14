@@ -1,30 +1,28 @@
-//
-//  EscolhaView.swift
-//  GarfoGrauT2
-//
-//  Created by User on 10/11/23.
-//
-
 import SwiftUI
 
 struct EscolhaView: View {
+    
+    //    TODO: CRIAR VARIÁVRL, OO
+    
     var body: some View {
         NavigationView(content: {
-            VStack(spacing: 15){
+            VStack(spacing: 12){
                 
-                Spacer(minLength: 110)
+                Spacer(minLength: 60)
                 Image("GarfoGrau")
+                    .resizable()
+                    .frame(width: 140, height: 130)
                 Text("O que você deseja?")
-                    .font(.system(size: 35))
+                    .font(.largeTitle)
                 
                 //BOTÃO "NOVA AVALIAÇÃO"
                 Spacer(minLength: 20)
                 
                 VStack(spacing: 30){
-                    NavigationLink(destination: DadosClienteView()){
-                    label: do {
+                    NavigationLink(destination: DadosClienteView()) {
+                    Label: do{
                         Text("NOVA AVALIAÇÃO")
-                            .font(.headline)
+                            .font(.body)
                             .frame(width: 213)
                             .foregroundColor(.black)
                             .padding()
@@ -38,10 +36,10 @@ struct EscolhaView: View {
                     }
                     
                     //BOTÃO "AVALIAÇÕES ANTERIORES"
-                    NavigationLink(destination: AvaliaView()){
-                    label: do {
+                    NavigationLink(destination: PreviousReviewsView(reviews: [])){
+                    Label: do{
                         Text("AVALIAÇÕES ANTERIORES")
-                            .font(.headline)
+                            .font(.body)
                             .frame(width: 213)
                             .foregroundColor(.black)
                             .padding()
@@ -55,10 +53,10 @@ struct EscolhaView: View {
                     }
                     
                     //BOTÃO "ACESSAR CARDÁPIO"
-                    NavigationLink(destination: CardapioView()){
-                    label: do {
+                    NavigationLink(destination: CardapioView()) {
+                    Label: do{
                         Text("ACESSAR CARDÁPIO")
-                            .font(.headline)
+                            .font(.body)
                             .frame(width: 213)
                             .foregroundColor(.black)
                             .padding()
@@ -70,13 +68,12 @@ struct EscolhaView: View {
                             )
                         }
                     }
-                    
                     Spacer()
                 }
                 HStack{
                     EImage("rosa", nameImgE: "amarelo")
                         .frame(alignment: .bottom)
-                        .position(x: 200, y: 190)
+                        .position(x: 200, y: 170)
                 }
             }
         })
@@ -85,4 +82,10 @@ struct EscolhaView: View {
 
 #Preview {
     EscolhaView()
+}
+
+struct Review: Identifiable, Codable {
+    var id = UUID()
+    var rating: Int
+    var comment: String
 }

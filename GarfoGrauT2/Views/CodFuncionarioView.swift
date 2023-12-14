@@ -1,58 +1,64 @@
 import SwiftUI
-import Foundation
 
 struct CodFuncionarioView: View {
-    
-    @State private var codFun = ""
+    @State private var password = ""
+    @State private var wrongPassword =  0
+    @State private var showingLoginScreen = false
     
     var body: some View {
-        NavigationView (content: {
             VStack{
-                
-                Spacer(minLength: 120)
-                
+                Spacer(minLength: 134)
                 Image("GarfoGrau")
+                    .resizable()
+                    .frame(width: 140, height: 130)
+                    .padding(20)
                 
-                Spacer()
+                Text("Digite o código de verificação:")
+                    .font(.title2)
+
+                SecureField("", text: $password)
+                    .frame(width: 300)
+                    .padding()
+                    .background(Color.black.opacity(0.05))
+                    .cornerRadius(10)
+                    .border(.red, width: CGFloat(wrongPassword))
                 
-                VStack(spacing: 25){
-                    //TextField que recebe o código do funcionário
-                    Text("Código do funcionário:")
-                        .font(.system(size: 28))
-                    
-                    TextField("", text: $codFun)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .frame(width: 300)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.black, lineWidth:0.3)
-                        )
-                }
+                Spacer(minLength: 70)
                 
-                Spacer()
-                
-                NavigationLink(destination: AvaliaView()){
-                label: do {
+                Button(action: {
+                    autheticaPass(passaword: password)
+                }) {Label: do {
                     Text("LIBERAR")
-                        .font(.headline)
+                        .font(.body)
                         .frame(width: 100,height: 18)
-                        .foregroundColor(.black)
+                        .foregroundColor(.white)
                         .padding()
-                        .background(Color.white)
-                        .cornerRadius(40)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.black, lineWidth: 1)
-                        )
-                    }
+                        .background(Color.orangeButton)
+                        .cornerRadius(10)
+//                        .overlay(
+//                            RoundedRectangle(cornerRadius: 10)
+//                                .stroke(Color.white, lineWidth: 1)
+//                        )
+                        .shadow(color: .gray, radius: 4, x: 0, y: 4)
+                }}
+                
+                NavigationLink( destination: AvaliaView(), isActive: $showingLoginScreen){
+                    
+                }
+                HStack{
+                    EImage("rosa", nameImgE: "amarelo")
+                        .frame(alignment: .bottom)
+                        .offset(y: 95)
                 }
             }
-            HStack{
-                EImage("rosa", nameImgE: "amarelo")
-                    .frame(alignment: .bottom)
-                    .offset(y: 12)
-            }
-        })
+    }
+    func autheticaPass(passaword: String){
+        if passaword.lowercased() == "1234" {
+            wrongPassword = 0
+            showingLoginScreen = true
+        } else {
+            wrongPassword = 2
+        }
     }
 }
 #Preview {
